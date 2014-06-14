@@ -28,7 +28,6 @@ See preparing the environment below if you want to manually prepare a docker env
     $ vagrant up
     ..
     $ vagrant ssh
-    $ cd share #You can now run the docker commands below
 
     TOTO: Create shell commands to auto start and restart jenkins. Could use fleetctrl services for this.
 
@@ -52,9 +51,22 @@ You can install the docker client on your host or you can connect to the VM via 
 
 ### Build Jenkins
 
-The build the image:
+The build the image from the VM:
 
-    $ docker build -t derick/jenkins-server server
+    core@core-01 ~ $ cd ~/share/server
+    core@core-01 ~/share/server $ docker build -t derick/jenkins-server .
+    ..
+    Step 10 : ENTRYPOINT exec su - -c "java -jar /usr/share/jenkins/jenkins.war"
+    ---> Using cache
+    ---> 449be8b71bbc
+    Successfully built 449be8b71bbc
+    ..
+
+
+Or if you have a docker client installed you can just run the command from the cloned project:
+
+    #Ensure you are in the cloned docker-jenkins directory
+    $ docker build -t derick/jenkins-server
 
 ### Manage the Jenkins Data Volume:
 
