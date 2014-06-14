@@ -1,21 +1,23 @@
 # Jenkins Server in Docker
 
-## Components used
+## Components
 
-- [Vagrant](http://www.vagrantup.com/) to provision a virtual machine.
-- [Docker](https://docs.docker.com/) to run Jenkins in a container (in a VM)
-- [CoreOS](https://coreos.com/) as VM since it also clusters machines and has **Docker** installed
+The following software components are used:
 
-## Persisting data between reboots
+- [Vagrant](http://www.vagrantup.com/) to provision a virtual machine on your host
+- [CoreOS](https://coreos.com/) - A Linux based virtual machine. Clusters machines and has **Docker** installed
+- [Docker](https://docs.docker.com/) to run Jenkins in an **portable** isolated container (Dockerfile)
 
-Docker uses [volumes](https://docs.docker.com/userguide/dockervolumes/) to share data / filesystems between containers. So we start a named **Data Volume Container** who's sole purpose is just to keep our data. To ensure that the data is kept between destorying and provisioning my VM, I expose part of my local filesystem:
+## About persisting between reboots
 
-   *MacBook* ==> *VM* ==> *Jenkins Data* (shared):
+[Docker](https://docs.docker.com/) uses [volumes](https://docs.docker.com/userguide/dockervolumes/) to share data / filesystems between containers. In the example below start a named **Data Volume Container** who's sole purpose is just to keep our jenkins data. To ensure that the data is kept between destorying and provisioning a new VM, we expose part of the local filesystem (Host):
 
-  - Host (MacBook) : */User/xxx/projects/github.com/coreos/coreos-vagrant/jenkins* (Kept on Host)
-  - Vagrant VM (CoreOS) : */home/core/share/* => Host **/User/xxx/projects/github.com/coreos/coreos-vagrant**
-  - Jenkins Data (Container) :  */root/* => CoreOS **/home/core/share/jenkins**
-  - Jenkins Server (Container) : */root* => Jenkins Data **/root** (Shared)
+   *Host* ==> *VM* ==> *Jenkins Data*:
+
+  - Host: */User/xxx/projects/github.com/coreos/coreos-vagrant/jenkins* (Shared via Virtualbox NFS export)
+  - VM (Vagrant provisioned VM) : */home/core/share/* => **/User/xxx/projects/github.com/coreos/coreos-vagrant** on Host
+  - jenkins-data (Data Container) :  */root/* => **/home/core/share/jenkins** on VM
+  - jenkins-server (Process Container) : */root* => Jenkins Data **/root** (Shared)
 
 ## Usage
 
@@ -29,6 +31,24 @@ See preparing the environment below if you want to manually prepare a docker env
     $ cd share #You can now run the docker commands below
 
     TOTO: Create shell commands to auto start and restart jenkins. Could use fleetctrl services for this.
+
+#### Running docker:
+
+You can install the docker client on your host or you can connect to the VM via vagrant:
+
+    $ vagrant ssh
+
+    # Now you can run your docker commands:
+    core@core-01 ~ $ docker version
+    Client version: 0.11.1
+    Client API version: 1.11
+    Go version (client): go1.2
+    Git commit (client): fb99f99
+    Server version: 0.11.1
+    Server API version: 1.11
+    Git commit (server): fb99f99
+    Go version (server): go1.2
+
 
 ### Build Jenkins
 
@@ -83,7 +103,7 @@ To stop and restart the server:
     $ docker rm jenkins-server
     #We can now start the container again.
 
-## Installation
+## Manual: Environment preparations
 
 ### Docker environment
 
@@ -150,22 +170,5 @@ To ensure that the jenkins instance is acessible from the outside we need to map
 Ensure you have changed the configuration files and mapped a port.
 
     $ vagrant up
-
-#### Running docker:
-
-You can install the docker client on your host or you can connect to the VM via vagrant:
-
-    $ vagrant ssh
-
-    # Now you can run your docker commands:
-    core@core-01 ~ $ docker version
-    Client version: 0.11.1
-    Client API version: 1.11
-    Go version (client): go1.2
-    Git commit (client): fb99f99
-    Server version: 0.11.1
-    Server API version: 1.11
-    Git commit (server): fb99f99
-    Go version (server): go1.2
 
 
