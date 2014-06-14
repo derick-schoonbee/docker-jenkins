@@ -21,10 +21,14 @@ Docker uses [volumes](https://docs.docker.com/userguide/dockervolumes/) to share
 
 See preparing the environment below if you want to manually prepare a docker environment. This repository containts a Vagrantfile taken from the CoreOS project:
 
+    $ git clone https://github.com/derick-schoonbee/docker-jenkins
+    $ cd docker-jenkins
     $ vagrant up
     ..
     $ vagrant ssh
     $ cd share #You can now run the docker commands below
+
+    TOTO: Create shell commands to auto start and restart jenkins. Could use fleetctrl services for this.
 
 ### Build Jenkins
 
