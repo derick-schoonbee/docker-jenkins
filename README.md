@@ -14,8 +14,8 @@ The following software components are used:
 
    *Host* ==> *VM* ==> *Jenkins Data*:
 
-  - Host: */User/xxx/projects/github.com/coreos/coreos-vagrant/jenkins* (Shared via Virtualbox NFS export)
-  - VM (Vagrant provisioned VM) : */home/core/share/* => **/User/xxx/projects/github.com/coreos/coreos-vagrant** on Host
+  - Host: *./{host-path}* (Shared via Virtualbox NFS export eg. /User/derick/docker-jenkins/)
+  - VM (Vagrant provisioned VM) : */home/core/share/* => **./{host-path}** on Host
   - jenkins-data (Data Container) :  */root/* => **/home/core/share/jenkins** on VM
   - jenkins-server (Process Container) : */root* => Jenkins Data **/root** (Shared)
 
